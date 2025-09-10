@@ -1,6 +1,3 @@
-# FastAPI Integration
-# Combines main.py with ICD-11 search functionality
-
 from fastapi import FastAPI, HTTPException, Query, Depends
 from typing import List
 from datetime import datetime
