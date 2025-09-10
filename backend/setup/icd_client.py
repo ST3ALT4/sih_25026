@@ -11,13 +11,13 @@ from fastapi import HTTPException
 
 class IcdEndpoint(Enum):
     """
-    Enhanced enum for ICD API endpoints
+    Enum for ICD API endpoints
     """
-    CHECK = '/icd/entity'
-    SEARCH = '/icd/release/11/mms/search'
-    ENTITY = '/icd/release/11/mms'
+    CHECK = '/icd/entity/'
+    SEARCH = '/icd/entity/search'
+    ENTITY = '/icd/entity'
     AUTO_CODE = '/icd/entity/autocode'
-    LINEARIZATION = '/icd/release/11/mms'
+    LINEARIZATION = '/icd/release/11/{releaseId}/{linearizationname}'
     
     def __str__(self):
         return self.value
@@ -26,37 +26,35 @@ class IcdEndpoint(Enum):
         """Format the endpoint string with provided arguments"""
         return self.value.format(**kwargs)
 
-class EnhancedIcdApiClient:
+class IcdApiClient:
     """
     Enhanced ICD API client with proper authentication and token management
     Builds upon your original design with production-ready features
     """
     
     def __init__(self, 
-                 client_id: str, 
-                 client_secret: str,
-                 local_base_url: str = "http://localhost:8080",
+                 local_base_url: str = "http://localhost",
                  global_base_url: str = "https://id.who.int"):
         
-        self.client_id = client_id
-        self.client_secret = client_secret
         self.local_base_url = local_base_url
         self.global_base_url = global_base_url
         self.token_endpoint = 'https://icdaccessmanagement.who.int/connect/token'
         
+        self.client_id = None
+        self.client_secret = None
         # Token management
         self.access_token = None
         self.token_expires = None
-        
-        # Determine active server
-        self.active_base_url = self._get_active_server()
-        
+             
         # Base headers for all requests
         self.base_headers = {
-            "Accept": "application/json",
+            "accept": "application/json",
             "API-Version": "v2",
             "Accept-Language": "en"
         }
+        # Determine active server
+        self.active_base_url = self._get_active_server()
+        
     
     def _get_active_server(self) -> str:
         """
@@ -66,6 +64,7 @@ class EnhancedIcdApiClient:
         try:
             response = requests.get(
                 f"{self.local_base_url}{IcdEndpoint.CHECK.value}",
+                headers=self.base_headers,
                 timeout=3,
                 verify=False
             )
@@ -77,11 +76,18 @@ class EnhancedIcdApiClient:
         
         # Fallback to global server
         print("🌐 Using global WHO ICD server")
+        self.client_id = os.getenv("ICD_CLIENT_ID", "your_client_id")
+        self.client_secret = os.getenv("ICD_CLIENT_SECRET", "your_client_secret")
+       
+        if self.client_id == "your_client_id" or self.client_secret == "your_client_secret": raise HTTPException(
+            status_code=500, 
+            detail="ICD-11 credentials not configured. Please set ICD_CLIENT_ID and ICD_CLIENT_SECRET environment variables."
+        )
         return self.global_base_url
     
     def _get_access_token(self) -> str:
         """
-        Enhanced token management with automatic refresh
+        Token management with automatic refresh
         """
         # Return existing token if still valid
         if (self.access_token and 
@@ -133,8 +139,9 @@ class EnhancedIcdApiClient:
     
     def get(self, endpoint: IcdEndpoint, params: Dict | None = None, headers: Dict | None = None, **kwargs) -> requests.Response:
         """
-        Enhanced GET method with authentication and error handling
+        GET method with authentication and error handling
         """
+
         if not self.active_base_url:
             raise HTTPException(status_code=503, detail="No ICD API server available")
         
@@ -222,7 +229,8 @@ class EnhancedIcdApiClient:
         """
         Get main ICD-11 categories/chapters
         """
-        response = self.get(IcdEndpoint.LINEARIZATION)
+        response = self.get(IcdEndpoint.LINEARIZATION, releaseId='2025-01', linearizationname='mms')
+
         return response.json()
     
     def health_check(self) -> Dict[str, Any]:

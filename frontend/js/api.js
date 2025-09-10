@@ -1,6 +1,6 @@
 // js/api.js
 
-const API_BASE_URL = '/api'; // Define a base URL for your API
+const API_BASE_URL = 'http://127.0.0.1:8000'; // Define a base URL for your API
 
 /**
  * Searches the terminology API.
