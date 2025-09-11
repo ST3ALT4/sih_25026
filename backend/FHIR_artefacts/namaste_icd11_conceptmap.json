@@ -1,0 +1,15 @@
+{
+  "resourceType": "ConceptMap",
+  "id": "namaste_ayurveda-to-icd11_TM2",
+  "url": "https://example.org/fhir/ConceptMap/namaste-to-icd11",
+  "version": "1.0.0",
+  "status": "active",
+  "date": "2025-09-11T13:21:35.845162",
+  "group": [
+    {
+      "source": "https://namaste.ayush.gov.in/ayurveda",
+      "target": "http://id.who.int/icd/release/11/mms",
+      "element": null
+    }
+  ]
+}

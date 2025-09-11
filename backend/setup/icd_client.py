@@ -1,5 +1,4 @@
-# Enhanced ICD-11 Client with Token Management
-# Builds upon your existing setup.py with better error handling and token management
+# ICD-11 Client with Token Management
 
 import requests
 import base64
@@ -76,10 +75,10 @@ class IcdApiClient:
         
         # Fallback to global server
         print("🌐 Using global WHO ICD server")
-        self.client_id = os.getenv("ICD_CLIENT_ID", "your_client_id")
-        self.client_secret = os.getenv("ICD_CLIENT_SECRET", "your_client_secret")
+        self.client_id = os.getenv("ICD_CLIENT_ID")
+        self.client_secret = os.getenv("ICD_CLIENT_SECRET")
        
-        if self.client_id == "your_client_id" or self.client_secret == "your_client_secret": raise HTTPException(
+        if not self.client_id or not self.client_secret : raise HTTPException(
             status_code=500, 
             detail="ICD-11 credentials not configured. Please set ICD_CLIENT_ID and ICD_CLIENT_SECRET environment variables."
         )
@@ -187,11 +186,12 @@ class IcdApiClient:
         params = {
             "q": query,
             "subtreeFilterUsesFoundationDescendants": "false",
+            "chapterFilter": "26",
             "includeKeywordResult": "false", 
             "useFlexisearch": "true",
             "flatResults": "true",
             "highlightingEnabled": "false",
-            " medicalCodingMode": "true",
+            "medicalCodingMode": "true",
             "maxList": limit
         }
         

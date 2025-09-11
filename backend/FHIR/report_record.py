@@ -18,6 +18,9 @@ def get_system_url(system_name: str) -> str:
     
     return system_mapping.get(system_name.lower(), "urn:oid:2.16.840.1.113883.6.96")
 
+def create_code_system():
+    code = Coding.construct()
+
 def create_fhir_condition(diagnosis_data: DiagnosisInput) -> Dict[str, Any]:
     """Enhanced FHIR Condition creation"""
     

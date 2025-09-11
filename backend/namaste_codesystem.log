@@ -1,0 +1,141 @@
+2025-09-11 05:37:17,334 - setup.ayurveda_code_system - INFO - Output directory ensured: /home/ani/coding/sih/sih_25026/backend/setup/FHIR_artefacts
+2025-09-11 05:37:17,335 - setup.ayurveda_code_system - INFO - Starting NAMASTE CodeSystem generation...
+2025-09-11 05:37:17,354 - setup.ayurveda_code_system - INFO - Loaded CSV with 2893 rows from /home/ani/coding/sih/sih_25026/dataset/ayurveda_morbidity_code.csv
+2025-09-11 05:37:17,419 - setup.ayurveda_code_system - INFO - Created CodeSystem with 2888 concepts
+2025-09-11 05:37:17,475 - setup.ayurveda_code_system - ERROR - Failed to save CodeSystem: module 'pydantic.json' has no attribute 'dump'
+2025-09-11 05:37:17,475 - setup.ayurveda_code_system - ERROR - ❌ CodeSystem generation failed: module 'pydantic.json' has no attribute 'dump'
+2025-09-11 05:44:54,436 - setup.ayurveda_code_system - INFO - Output directory ensured: /home/ani/coding/sih/sih_25026/backend/setup/FHIR_artefacts
+2025-09-11 05:44:54,437 - setup.ayurveda_code_system - INFO - Starting NAMASTE CodeSystem generation...
+2025-09-11 05:44:54,447 - setup.ayurveda_code_system - INFO - Loaded CSV with 2893 rows from /home/ani/coding/sih/sih_25026/dataset/ayurveda_morbidity_code.csv
+2025-09-11 05:44:54,501 - setup.ayurveda_code_system - INFO - Created CodeSystem with 2888 concepts
+2025-09-11 05:44:54,519 - setup.ayurveda_code_system - ERROR - Failed to save CodeSystem: module 'pydantic.json' has no attribute 'dump'
+2025-09-11 05:44:54,519 - setup.ayurveda_code_system - ERROR - ❌ CodeSystem generation failed: module 'pydantic.json' has no attribute 'dump'
+2025-09-11 05:52:58,016 - setup.ayurveda_code_system - INFO - Output directory ensured: /home/ani/coding/sih/sih_25026/backend/setup/FHIR_artefacts
+2025-09-11 05:52:58,016 - setup.ayurveda_code_system - INFO - Starting NAMASTE CodeSystem generation...
+2025-09-11 05:52:58,028 - setup.ayurveda_code_system - INFO - Loaded CSV with 2893 rows from /home/ani/coding/sih/sih_25026/dataset/ayurveda_morbidity_code.csv
+2025-09-11 05:52:58,088 - setup.ayurveda_code_system - INFO - Created CodeSystem with 2888 concepts
+2025-09-11 05:52:58,108 - setup.ayurveda_code_system - ERROR - Failed to save CodeSystem: module 'pydantic.json' has no attribute 'dump'
+2025-09-11 05:52:58,108 - setup.ayurveda_code_system - ERROR - ❌ CodeSystem generation failed: module 'pydantic.json' has no attribute 'dump'
+2025-09-11 05:53:32,281 - setup.ayurveda_code_system - INFO - Output directory ensured: /home/ani/coding/sih/sih_25026/backend/setup/FHIR_artefacts
+2025-09-11 05:53:32,281 - setup.ayurveda_code_system - INFO - Starting NAMASTE CodeSystem generation...
+2025-09-11 05:53:32,293 - setup.ayurveda_code_system - INFO - Loaded CSV with 2893 rows from /home/ani/coding/sih/sih_25026/dataset/ayurveda_morbidity_code.csv
+2025-09-11 05:53:32,362 - setup.ayurveda_code_system - INFO - Created CodeSystem with 2888 concepts
+2025-09-11 05:53:32,386 - setup.ayurveda_code_system - INFO - CodeSystem saved to: /home/ani/coding/sih/sih_25026/backend/setup/FHIR_artefacts/namaste_codesystem.json
+2025-09-11 05:53:32,387 - setup.ayurveda_code_system - INFO - ✅ NAMASTE CodeSystem generation completed successfully!
+2025-09-11 05:53:32,387 - setup.ayurveda_code_system - INFO - 📊 Total concepts: 2888
+2025-09-11 05:53:32,387 - setup.ayurveda_code_system - INFO - ⚠️  Warnings: 0
+2025-09-11 05:53:32,387 - setup.ayurveda_code_system - INFO - 💾 Output file: /home/ani/coding/sih/sih_25026/backend/setup/FHIR_artefacts/namaste_codesystem.json
+2025-09-11 06:15:08,000 - setup.ayurveda_code_system - INFO - Output directory ensured: /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts
+2025-09-11 06:15:08,001 - setup.ayurveda_code_system - INFO - Starting NAMASTE CodeSystem generation...
+2025-09-11 06:15:08,016 - setup.ayurveda_code_system - INFO - Loaded CSV with 2893 rows from /home/ani/coding/sih/sih_25026/dataset/ayurveda_morbidity_code.csv
+2025-09-11 06:15:08,083 - setup.ayurveda_code_system - INFO - Created CodeSystem with 2888 concepts
+2025-09-11 06:15:08,104 - setup.ayurveda_code_system - INFO - CodeSystem saved to: /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts/namaste_codesystem.json
+2025-09-11 06:15:08,105 - setup.ayurveda_code_system - INFO - ✅ NAMASTE CodeSystem generation completed successfully!
+2025-09-11 06:15:08,105 - setup.ayurveda_code_system - INFO - 📊 Total concepts: 2888
+2025-09-11 06:15:08,105 - setup.ayurveda_code_system - INFO - ⚠️  Warnings: 0
+2025-09-11 06:15:08,105 - setup.ayurveda_code_system - INFO - 💾 Output file: /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts/namaste_codesystem.json
+2025-09-11 10:38:48,650 - setup.ayurveda_code_system - INFO - Output directory ensured: /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts
+2025-09-11 10:38:48,650 - setup.ayurveda_code_system - INFO - Starting NAMASTE CodeSystem generation...
+2025-09-11 10:38:48,668 - setup.ayurveda_code_system - INFO - Loaded CSV with 2893 rows from /home/ani/coding/sih/sih_25026/dataset/ayurveda_morbidity_code.csv
+2025-09-11 10:38:48,758 - setup.ayurveda_code_system - INFO - Created CodeSystem with 2888 concepts
+2025-09-11 10:38:48,779 - setup.ayurveda_code_system - INFO - CodeSystem saved to: /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts/namaste_codesystem.json
+2025-09-11 10:38:48,779 - setup.ayurveda_code_system - INFO - ✅ NAMASTE CodeSystem generation completed successfully!
+2025-09-11 10:38:48,780 - setup.ayurveda_code_system - INFO - 📊 Total concepts: 2888
+2025-09-11 10:38:48,780 - setup.ayurveda_code_system - INFO - ⚠️  Warnings: 0
+2025-09-11 10:38:48,780 - setup.ayurveda_code_system - INFO - 💾 Output file: /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts/namaste_codesystem.json
+2025-09-11 10:50:04,664 - setup.ayurveda_code_system - INFO - Output directory ensured: /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts
+2025-09-11 10:50:04,664 - setup.ayurveda_code_system - INFO - Starting NAMASTE CodeSystem generation...
+2025-09-11 10:50:04,681 - setup.ayurveda_code_system - INFO - Loaded CSV with 2893 rows from /home/ani/coding/sih/sih_25026/dataset/ayurveda_morbidity_code.csv
+2025-09-11 10:50:04,772 - setup.ayurveda_code_system - INFO - Created CodeSystem with 2888 concepts
+2025-09-11 10:50:04,802 - setup.ayurveda_code_system - INFO - CodeSystem saved to: /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts/namaste_codesystem.json
+2025-09-11 10:50:04,803 - setup.ayurveda_code_system - INFO - ✅ NAMASTE CodeSystem generation completed successfully!
+2025-09-11 10:50:04,803 - setup.ayurveda_code_system - INFO - 📊 Total concepts: 2888
+2025-09-11 10:50:04,803 - setup.ayurveda_code_system - INFO - ⚠️  Warnings: 0
+2025-09-11 10:50:04,803 - setup.ayurveda_code_system - INFO - 💾 Output file: /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts/namaste_codesystem.json
+2025-09-11 10:54:37,041 - setup.ayurveda_code_system - INFO - Output directory ensured: /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts
+2025-09-11 10:54:37,042 - setup.ayurveda_code_system - INFO - Starting NAMASTE CodeSystem generation...
+2025-09-11 10:54:37,057 - setup.ayurveda_code_system - INFO - Loaded CSV with 2893 rows from /home/ani/coding/sih/sih_25026/dataset/ayurveda_morbidity_code.csv
+2025-09-11 10:54:37,147 - setup.ayurveda_code_system - INFO - Created CodeSystem with 2888 concepts
+2025-09-11 10:54:37,171 - setup.ayurveda_code_system - INFO - CodeSystem saved to: /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts/namaste_codesystem.json
+2025-09-11 10:54:37,172 - setup.ayurveda_code_system - INFO - ✅ NAMASTE CodeSystem generation completed successfully!
+2025-09-11 10:54:37,172 - setup.ayurveda_code_system - INFO - 📊 Total concepts: 2888
+2025-09-11 10:54:37,172 - setup.ayurveda_code_system - INFO - ⚠️  Warnings: 0
+2025-09-11 10:54:37,172 - setup.ayurveda_code_system - INFO - 💾 Output file: /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts/namaste_codesystem.json
+2025-09-11 11:01:46,886 - setup.ayurveda_code_system - INFO - Output directory ensured: /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts
+2025-09-11 11:01:46,887 - setup.ayurveda_code_system - INFO - Starting NAMASTE CodeSystem generation...
+2025-09-11 11:01:46,901 - setup.ayurveda_code_system - INFO - Loaded CSV with 2893 rows from /home/ani/coding/sih/sih_25026/dataset/ayurveda_morbidity_code.csv
+2025-09-11 11:01:46,990 - setup.ayurveda_code_system - INFO - Created CodeSystem with 2888 concepts
+2025-09-11 11:01:47,014 - setup.ayurveda_code_system - INFO - CodeSystem saved to: /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts/namaste_codesystem.json
+2025-09-11 11:01:47,015 - setup.ayurveda_code_system - INFO - ✅ NAMASTE CodeSystem generation completed successfully!
+2025-09-11 11:01:47,015 - setup.ayurveda_code_system - INFO - 📊 Total concepts: 2888
+2025-09-11 11:01:47,015 - setup.ayurveda_code_system - INFO - ⚠️  Warnings: 0
+2025-09-11 11:01:47,016 - setup.ayurveda_code_system - INFO - 💾 Output file: /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts/namaste_codesystem.json
+2025-09-11 12:59:28,672 - setup.ayurveda_code_system - INFO - Output directory ensured: /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts
+2025-09-11 12:59:28,672 - setup.ayurveda_code_system - INFO - Starting NAMASTE CodeSystem generation...
+2025-09-11 12:59:28,686 - setup.ayurveda_code_system - INFO - Loaded CSV with 2893 rows from /home/ani/coding/sih/sih_25026/dataset/ayurveda_morbidity_code.csv
+2025-09-11 12:59:28,769 - setup.ayurveda_code_system - INFO - Created CodeSystem with 2888 concepts
+2025-09-11 12:59:28,791 - setup.ayurveda_code_system - INFO - CodeSystem saved to: /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts/namaste_codesystem.json
+2025-09-11 12:59:28,791 - setup.ayurveda_code_system - INFO - ✅ NAMASTE CodeSystem generation completed successfully!
+2025-09-11 12:59:28,791 - setup.ayurveda_code_system - INFO - 📊 Total concepts: 2888
+2025-09-11 12:59:28,791 - setup.ayurveda_code_system - INFO - ⚠️  Warnings: 0
+2025-09-11 12:59:28,791 - setup.ayurveda_code_system - INFO - 💾 Output file: /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts/namaste_codesystem.json
+2025-09-11 13:05:38,144 - setup.ayurveda_code_system - INFO - Output directory ensured: /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts
+2025-09-11 13:05:38,144 - setup.ayurveda_code_system - INFO - Starting NAMASTE CodeSystem generation...
+2025-09-11 13:05:38,158 - setup.ayurveda_code_system - INFO - Loaded CSV with 2893 rows from /home/ani/coding/sih/sih_25026/dataset/ayurveda_morbidity_code.csv
+2025-09-11 13:05:38,243 - setup.ayurveda_code_system - INFO - Created CodeSystem with 2888 concepts
+2025-09-11 13:05:38,269 - setup.ayurveda_code_system - INFO - CodeSystem saved to: /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts/namaste_codesystem.json
+2025-09-11 13:05:38,269 - setup.ayurveda_code_system - INFO - ✅ NAMASTE CodeSystem generation completed successfully!
+2025-09-11 13:05:38,269 - setup.ayurveda_code_system - INFO - 📊 Total concepts: 2888
+2025-09-11 13:05:38,269 - setup.ayurveda_code_system - INFO - ⚠️  Warnings: 0
+2025-09-11 13:05:38,269 - setup.ayurveda_code_system - INFO - 💾 Output file: /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts/namaste_codesystem.json
+2025-09-11 13:05:38,292 - setup.conceptmap_generator - INFO - Loaded 0 mapping rows from /home/ani/coding/sih/sih_25026/backend/dataset/namaste_icd11_mapping.csv
+2025-09-11 13:05:38,292 - setup.conceptmap_generator - INFO - ✅ Generated ConceptMap with 0 mappings
+2025-09-11 13:05:38,293 - setup.conceptmap_generator - INFO - 💾 ConceptMap saved to /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts/namaste_icd11_conceptmap.json
+2025-09-11 13:14:52,385 - setup.ayurveda_code_system - INFO - Output directory ensured: /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts
+2025-09-11 13:14:52,385 - setup.ayurveda_code_system - INFO - Starting NAMASTE CodeSystem generation...
+2025-09-11 13:14:52,397 - setup.ayurveda_code_system - INFO - Loaded CSV with 2893 rows from /home/ani/coding/sih/sih_25026/backend/dataset/ayurveda_morbidity_code.csv
+2025-09-11 13:14:52,493 - setup.ayurveda_code_system - INFO - Created CodeSystem with 2888 concepts
+2025-09-11 13:14:52,514 - setup.ayurveda_code_system - INFO - CodeSystem saved to: /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts/namaste_codesystem.json
+2025-09-11 13:14:52,514 - setup.ayurveda_code_system - INFO - ✅ NAMASTE CodeSystem generation completed successfully!
+2025-09-11 13:14:52,515 - setup.ayurveda_code_system - INFO - 📊 Total concepts: 2888
+2025-09-11 13:14:52,515 - setup.ayurveda_code_system - INFO - ⚠️  Warnings: 0
+2025-09-11 13:14:52,515 - setup.ayurveda_code_system - INFO - 💾 Output file: /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts/namaste_codesystem.json
+2025-09-11 13:14:52,678 - setup.conceptmap_generator - INFO - Loaded 0 mapping rows from /home/ani/coding/sih/sih_25026/backend/dataset/namaste_icd11_mapping.csv
+2025-09-11 13:14:52,678 - setup.conceptmap_generator - INFO - ✅ Generated ConceptMap with 0 mappings
+2025-09-11 13:14:52,679 - setup.conceptmap_generator - INFO - 💾 ConceptMap saved to /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts/namaste_icd11_conceptmap.json
+2025-09-11 13:17:50,012 - setup.ayurveda_code_system - INFO - Output directory ensured: /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts
+2025-09-11 13:17:50,013 - setup.ayurveda_code_system - INFO - Starting NAMASTE CodeSystem generation...
+2025-09-11 13:17:50,025 - setup.ayurveda_code_system - INFO - Loaded CSV with 2893 rows from /home/ani/coding/sih/sih_25026/backend/dataset/ayurveda_morbidity_code.csv
+2025-09-11 13:17:50,121 - setup.ayurveda_code_system - INFO - Created CodeSystem with 2888 concepts
+2025-09-11 13:17:50,143 - setup.ayurveda_code_system - INFO - CodeSystem saved to: /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts/namaste_codesystem.json
+2025-09-11 13:17:50,143 - setup.ayurveda_code_system - INFO - ✅ NAMASTE CodeSystem generation completed successfully!
+2025-09-11 13:17:50,144 - setup.ayurveda_code_system - INFO - 📊 Total concepts: 2888
+2025-09-11 13:17:50,144 - setup.ayurveda_code_system - INFO - ⚠️  Warnings: 0
+2025-09-11 13:17:50,144 - setup.ayurveda_code_system - INFO - 💾 Output file: /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts/namaste_codesystem.json
+2025-09-11 13:17:50,182 - setup.conceptmap_generator - INFO - Loaded 0 mapping rows from /home/ani/coding/sih/sih_25026/backend/dataset/namaste_icd11_mapping.csv
+2025-09-11 13:17:50,182 - setup.conceptmap_generator - INFO - ✅ Generated ConceptMap with 0 mappings
+2025-09-11 13:17:50,182 - setup.conceptmap_generator - INFO - 💾 ConceptMap saved to /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts/namaste_icd11_conceptmap.json
+2025-09-11 13:21:03,632 - setup.ayurveda_code_system - INFO - Output directory ensured: /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts
+2025-09-11 13:21:03,633 - setup.ayurveda_code_system - INFO - Starting NAMASTE CodeSystem generation...
+2025-09-11 13:21:03,646 - setup.ayurveda_code_system - INFO - Loaded CSV with 2893 rows from /home/ani/coding/sih/sih_25026/backend/dataset/ayurveda_morbidity_code.csv
+2025-09-11 13:21:03,751 - setup.ayurveda_code_system - INFO - Created CodeSystem with 2888 concepts
+2025-09-11 13:21:03,773 - setup.ayurveda_code_system - INFO - CodeSystem saved to: /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts/namaste_codesystem.json
+2025-09-11 13:21:03,773 - setup.ayurveda_code_system - INFO - ✅ NAMASTE CodeSystem generation completed successfully!
+2025-09-11 13:21:03,773 - setup.ayurveda_code_system - INFO - 📊 Total concepts: 2888
+2025-09-11 13:21:03,773 - setup.ayurveda_code_system - INFO - ⚠️  Warnings: 0
+2025-09-11 13:21:03,773 - setup.ayurveda_code_system - INFO - 💾 Output file: /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts/namaste_codesystem.json
+2025-09-11 13:21:03,817 - setup.conceptmap_generator - INFO - Loaded 0 mapping rows from /home/ani/coding/sih/sih_25026/backend/dataset/namaste_icd11_mapping.csv
+2025-09-11 13:21:03,817 - setup.conceptmap_generator - INFO - ✅ Generated ConceptMap with 0 mappings
+2025-09-11 13:21:03,818 - setup.conceptmap_generator - INFO - 💾 ConceptMap saved to /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts/namaste_icd11_conceptmap.json
+2025-09-11 13:22:45,166 - setup.ayurveda_code_system - INFO - Output directory ensured: /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts
+2025-09-11 13:22:45,166 - setup.ayurveda_code_system - INFO - Starting NAMASTE CodeSystem generation...
+2025-09-11 13:22:45,180 - setup.ayurveda_code_system - INFO - Loaded CSV with 2893 rows from /home/ani/coding/sih/sih_25026/backend/dataset/ayurveda_morbidity_code.csv
+2025-09-11 13:21:35,787 - setup.ayurveda_code_system - INFO - Created CodeSystem with 2888 concepts
+2025-09-11 13:21:35,817 - setup.ayurveda_code_system - INFO - CodeSystem saved to: /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts/namaste_codesystem.json
+2025-09-11 13:21:35,817 - setup.ayurveda_code_system - INFO - ✅ NAMASTE CodeSystem generation completed successfully!
+2025-09-11 13:21:35,817 - setup.ayurveda_code_system - INFO - 📊 Total concepts: 2888
+2025-09-11 13:21:35,817 - setup.ayurveda_code_system - INFO - ⚠️  Warnings: 0
+2025-09-11 13:21:35,817 - setup.ayurveda_code_system - INFO - 💾 Output file: /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts/namaste_codesystem.json
+2025-09-11 13:21:35,845 - setup.conceptmap_generator - INFO - Loaded 0 mapping rows from /home/ani/coding/sih/sih_25026/backend/dataset/namaste_icd11_mapping.csv
+2025-09-11 13:21:35,845 - setup.conceptmap_generator - INFO - ✅ Generated ConceptMap with 0 mappings
+2025-09-11 13:21:35,845 - setup.conceptmap_generator - INFO - 💾 ConceptMap saved to /home/ani/coding/sih/sih_25026/backend/FHIR_artefacts/namaste_icd11_conceptmap.json

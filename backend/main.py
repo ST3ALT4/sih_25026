@@ -1,3 +1,4 @@
+import json
 from fastapi import FastAPI, HTTPException, Query, Depends
 from typing import List
 from datetime import datetime
@@ -10,6 +11,9 @@ from fhir.resources.diagnosticreport import DiagnosticReport
 from FHIR.models import ICDSearchResult, DiagnosticReportInput, SymptomSearchRequest, DiagnosisInput
 from FHIR.report_record import create_fhir_condition
 from setup.icd_client import IcdApiClient
+from setup.ayurveda_code_system import create_ayurveda_code
+from setup.mapping import map 
+from setup.conceptmap_generator import create_conceptmap 
 # --- FastAPI App Setup ---
 
 app = FastAPI(
@@ -24,6 +28,10 @@ icd_client = IcdApiClient()
 def get_icd_client():
     global icd_client
     return icd_client
+
+create_ayurveda_code() 
+map(icd_client)
+create_conceptmap()
 
 # --- API Endpoints ---
 
@@ -48,6 +56,24 @@ def read_root():
         }
     }
 
+@app.get("/ayurveda")
+async def ayurveda_code(): 
+
+    try:
+        with open('FHIR_artefacts/namaste_codesystem.json', 'r', encoding='utf-8') as infile:
+            data = json.load(infile)
+            return data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f'{e}')
+
+@app.get("/mapped")
+async def mapped():
+    try:
+        with open('FHIR_artefacts/namaste_icd11_conceptmap.json', 'r', encoding='utf-8') as infile:
+            data = json.load(infile)
+            return data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f'{e}')
 @app.get("/icd/search", response_model=List[ICDSearchResult])
 async def search_icd_conditions(
     q: str = Query(..., description="Search query for medical conditions"),
