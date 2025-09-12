@@ -1,0 +1,13 @@
+namaste_code,namaste_term,icd_code,icd_term,equivalence,confidence_score,mapping_source,original_namc_code
+AAB-1,atipralApaH (kEvalavAta),SQ00,Delirium disorder (TM2),equivalent,1.0,existing,SQ00 (AAB-1)
+AAB-26,klamaH (kEvalavAta),SP97,Severe fatigue disorder (TM2),equivalent,1.0,existing,SP97 (AAB-26)
+AAC-4,arditaH,SK20,Facial palsy disorder (TM2),equivalent,1.0,existing,SK20(AAC-4)
+ABA-1,pittasa~jcayaH,SR16,Accumulation of pitta pattern (TM2),equivalent,1.0,existing,SR16(ABA-1)
+ABB-9,AsyavipAkaH (kEvalapitta),SM10,Stomatitis disorder (TM2),equivalent,1.0,existing,SM10(ABB-9)
+ACB-3,Alasyam (kEvala-kapha),SP96,Laziness disorder (TM2),equivalent,1.0,existing,SP96(ACB-3)
+BI,rAjayakShmA,SP5B,Consumptive disorder (TM2),equivalent,1.0,existing,SP5B (BI)
+EB-3,ajIrNam,SM3B,Indigestion disorder (TM2),equivalent,1.0,existing,SM3B(EB-3)
+EE-3,arSaH,SM53,Haemorrhoids disorder (TM2),equivalent,1.0,existing,SM53 (EE-3)
+EE-4,granthiH,SP71,Benign tumour disorder (TM2),equivalent,1.0,existing,SP71 (EE-4)
+F-1,SiraHSUlaH,SP19,Unknown ICD Term,equivalent,1.0,existing,SP19 (F-1)
+H-1,kAmaLA,SP29,Unknown ICD Term,equivalent,1.0,existing,SP29 (H-1)

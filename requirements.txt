@@ -7,9 +7,10 @@ uvicorn[standard]==0.29.0
 # The core library for creating and validating FHIR R4 resources
 fhir.resources==7.1.0
 
-# For making HTTP requests to the EMR API
 requests==2.31.0
-
+pandas
 thefuzz
 python-levenshtein
 tqdm
+python-dotenv
+spacy

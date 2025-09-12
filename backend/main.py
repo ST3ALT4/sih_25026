@@ -12,7 +12,7 @@ from FHIR.models import ICDSearchResult, DiagnosticReportInput, SymptomSearchReq
 from FHIR.report_record import create_fhir_condition
 from setup.icd_client import IcdApiClient
 from setup.ayurveda_code_system import create_ayurveda_code
-from setup.mapping import map 
+from setup.auto_mapping import create_mapping_file  
 from setup.conceptmap_generator import create_conceptmap 
 # --- FastAPI App Setup ---
 
@@ -30,7 +30,7 @@ def get_icd_client():
     return icd_client
 
 create_ayurveda_code() 
-map(icd_client)
+create_mapping_file(icd_client)
 create_conceptmap()
 
 # --- API Endpoints ---
@@ -74,6 +74,7 @@ async def mapped():
             return data
     except Exception as e:
         raise HTTPException(status_code=500, detail=f'{e}')
+
 @app.get("/icd/search", response_model=List[ICDSearchResult])
 async def search_icd_conditions(
     q: str = Query(..., description="Search query for medical conditions"),

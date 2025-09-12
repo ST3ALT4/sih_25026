@@ -17,6 +17,8 @@ class IcdEndpoint(Enum):
     ENTITY = '/icd/entity'
     AUTO_CODE = '/icd/entity/autocode'
     LINEARIZATION = '/icd/release/11/{releaseId}/{linearizationname}'
+    LINEARIZATION_ID = 'icd/release/11/{releaseId}/{linearizationname}/{id}'
+    SEARCH_CODE = '/icd/release/11/{releaseId}/{linearizationname}/codeinfo/{code}'
     
     def __str__(self):
         return self.value
@@ -232,6 +234,37 @@ class IcdApiClient:
         response = self.get(IcdEndpoint.LINEARIZATION, releaseId='2025-01', linearizationname='mms')
 
         return response.json()
+
+    def search_code(self, icd_code) -> Dict[str, Any]:
+        """
+        """
+
+        try:
+            response = self.get(IcdEndpoint.SEARCH_CODE, releaseId='2025-01', linearizationname='mms', code=icd_code)
+            return response.json()
+        except requests.exceptions.RequestException as e:
+            raise HTTPException(
+                status_code=500,
+                detail=f"falied to get icd entity id for code {str(e)}"
+            )
+    def get_entity_context(self, entity_id) -> Dict[str, Any]:
+        """
+        Get contect detail of an icd entity
+        """
+        # Handle both full URIs and entity IDs
+        if entity_id.startswith("http"):
+            # Extract entity ID from URI
+            entity_id = entity_id.split("/")[-1]
+        
+        try:
+            response = self.get(IcdEndpoint.LINEARIZATION_ID, releaseId='2025-01', linearizationname='mms', id=entity_id, verify=False)
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.RequestException as e:
+            raise HTTPException(
+                status_code=500, 
+                detail=f"Failed to get entity details: {str(e)}"
+            )
     
     def health_check(self) -> Dict[str, Any]:
         """

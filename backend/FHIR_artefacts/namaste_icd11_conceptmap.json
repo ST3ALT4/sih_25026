@@ -4,12 +4,145 @@
   "url": "https://example.org/fhir/ConceptMap/namaste-to-icd11",
   "version": "1.0.0",
   "status": "active",
-  "date": "2025-09-11T13:21:35.845162",
+  "date": "2025-09-13T00:29:12.320314",
   "group": [
     {
       "source": "https://namaste.ayush.gov.in/ayurveda",
       "target": "http://id.who.int/icd/release/11/mms",
-      "element": null
+      "element": [
+        {
+          "code": "AAB-1",
+          "display": "atipralApaH (kEvalavAta)",
+          "target": [
+            {
+              "code": "SQ00",
+              "display": "Delirium disorder (TM2)",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "AAB-26",
+          "display": "klamaH (kEvalavAta)",
+          "target": [
+            {
+              "code": "SP97",
+              "display": "Severe fatigue disorder (TM2)",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "AAC-4",
+          "display": "arditaH",
+          "target": [
+            {
+              "code": "SK20",
+              "display": "Facial palsy disorder (TM2)",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "ABA-1",
+          "display": "pittasa~jcayaH",
+          "target": [
+            {
+              "code": "SR16",
+              "display": "Accumulation of pitta pattern (TM2)",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "ABB-9",
+          "display": "AsyavipAkaH (kEvalapitta)",
+          "target": [
+            {
+              "code": "SM10",
+              "display": "Stomatitis disorder (TM2)",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "ACB-3",
+          "display": "Alasyam (kEvala-kapha)",
+          "target": [
+            {
+              "code": "SP96",
+              "display": "Laziness disorder (TM2)",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "BI",
+          "display": "rAjayakShmA",
+          "target": [
+            {
+              "code": "SP5B",
+              "display": "Consumptive disorder (TM2)",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "EB-3",
+          "display": "ajIrNam",
+          "target": [
+            {
+              "code": "SM3B",
+              "display": "Indigestion disorder (TM2)",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "EE-3",
+          "display": "arSaH",
+          "target": [
+            {
+              "code": "SM53",
+              "display": "Haemorrhoids disorder (TM2)",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "EE-4",
+          "display": "granthiH",
+          "target": [
+            {
+              "code": "SP71",
+              "display": "Benign tumour disorder (TM2)",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "F-1",
+          "display": "SiraHSUlaH",
+          "target": [
+            {
+              "code": "SP19",
+              "display": "Unknown ICD Term",
+              "equivalence": "equivalent"
+            }
+          ]
+        },
+        {
+          "code": "H-1",
+          "display": "kAmaLA",
+          "target": [
+            {
+              "code": "SP29",
+              "display": "Unknown ICD Term",
+              "equivalence": "equivalent"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

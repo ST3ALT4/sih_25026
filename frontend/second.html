@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NAMASTE-ICD11 Terminology Service | Ministry of Ayush</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    
+    <style>
+        :root {
+            --namaste-color: #3498db;
+            --tm2-color: #2ecc71;
+            --icd11-color: #9b59b6;
+            --primary-gradient: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+            --background-gradient: linear-gradient(120deg, #f8f9fa 0%, #e9ecef 100%);
+            --orange: #e67e22;
+        }
+        
+        body {
+            background: var(--background-gradient);
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 90% 80%, rgba(13, 110, 253, 0.03) 0%, transparent 20%),
+                radial-gradient(circle at 20% 10%, rgba(46, 204, 113, 0.03) 0%, transparent 20%),
+                radial-gradient(circle at 50% 50%, rgba(155, 89, 182, 0.02) 0%, transparent 30%);
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .system-badge-namaste {
+            background-color: var(--namaste-color);
+        }
+        
+        .system-badge-icd-11-tm2 {
+            background-color: var(--tm2-color);
+        }
+        
+        .system-badge-icd-11 {
+            background-color: var(--icd11-color);
+        }
+        
+        .search-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(222, 226, 230, 0.8);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            backdrop-filter: blur(5px);
+        }
+        
+        .concept-card {
+            transition: all 0.3s ease;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.04);
+            background: white;
+        }
+        
+        .concept-card:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transform: translateY(-3px);
+        }
+        
+        .mapping-line {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .mapping-arrow {
+            margin: 0 15px;
+            color: #6c757d;
+            font-size: 24px;
+        }
+        
+        .fhir-resource {
+            font-family: 'Courier New', monospace;
+            background-color: #f8f9fa;
+            border-left: 4px solid #0d6efd;
+            padding: 15px;
+            border-radius: 5px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 0.9rem;
+        }
+        
+        .terminology-pill {
+            font-size: 0.75rem;
+            padding: 0.35em 0.65em;
+        }
+        
+        #searchResults {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .loading-spinner {
+            display: none;
+            width: 2rem;
+            height: 2rem;
+            border: 0.25em solid currentColor;
+            border-right-color: transparent;
+        }
+        
+        .logo-container {
+            background: var(--primary-gradient);
+            color: white;
+            border-radius: 12px;
+            padding: 12px 18px;
+            display: inline-flex;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+        }
+        
+        header {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .nav-gradient {
+            background: var(--primary-gradient);
+            box-shadow: 0 4px 15px rgba(13, 110, 253, 0.25);
+        }
+        
+        .card {
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(222, 226, 230, 0.8);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn {
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+        
+        footer {
+            background: linear-gradient(135deg, #343a40 0%, #212529 100%);
+            margin-top: 50px;
+        }
+        
+        .floating-shape {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, rgba(13, 110, 253, 0.1) 0%, rgba(102, 16, 242, 0.1) 100%);
+            filter: blur(50px);
+            z-index: -1;
+            opacity: 0.5;
+        }
+        
+        .shape-1 {
+            top: 10%;
+            right: -100px;
+        }
+        
+        .shape-2 {
+            bottom: 20%;
+            left: -150px;
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(45deg, rgba(46, 204, 113, 0.1) 0%, rgba(52, 152, 219, 0.1) 100%);
+        }
+        
+        .integration-graphic {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+        }
+        
+        .integration-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            background: white;
+        }
+        
+        .integration-arrow {
+            font-size: 24px;
+            color: #6c757d;
+            margin: 0 10px;
+        }
+        
+        .integration-namaste {
+            border: 3px solid var(--namaste-color);
+        }
+        
+        .integration-tm2 {
+            border: 3px solid var(--tm2-color);
+        }
+        
+        .integration-icd11 {
+            border: 3px solid var(--icd11-color);
+        }
+        
+        .mapping-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        
+        .mapping-details.show {
+            max-height: 500px;
+        }
+        
+        .dropdown-menu {
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .dropdown-item {
+            padding: 0.5rem 1rem;
+            transition: all 0.2s;
+        }
+        
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+        
+        /* Auth Modal Styles */
+        .auth-modal .modal-content {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .auth-header {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .auth-tabs {
+            display: flex;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .auth-tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .auth-tab.active {
+            border-bottom: 3px solid #0d6efd;
+            font-weight: bold;
+        }
+        
+        .auth-form {
+            padding: 20px;
+        }
+        
+        .auth-form .form-check {
+            margin-bottom: 15px;
+        }
+        
+        .auth-form .btn {
+            background: var(--orange);
+            border: none;
+            padding: 12px;
+        }
+        
+        .auth-form .btn:hover {
+            background: #cf711c;
+        }
+        
+        @media (max-width: 768px) {
+            .mapping-line {
+                flex-direction: column;
+            }
+            
+            .mapping-arrow {
+                transform: rotate(90deg);
+                margin: 10px 0;
+            }
+            
+            .integration-graphic {
+                flex-direction: column;
+            }
+            
+            .integration-arrow {
+                transform: rotate(90deg);
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="floating-shape shape-1"></div>
+    <div class="floating-shape shape-2"></div>
+    
+    <div class="toast-container" id="toastContainer"></div>
+    
+    <div class="modal fade auth-modal" id="authModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="auth-header">
+                    <h4 class="mb-0">NAMASTE-ICD11 Terminology Service</h4>
+                    <p class="mb-0">Access advanced terminology tools</p>
+                </div>
+                
+                <div class="auth-tabs">
+                    <div class="auth-tab active" id="loginTab">Login</div>
+                    <div class="auth-tab" id="signupTab">Sign Up</div>
+                </div>
+                
+                <div class="auth-form">
+                    </div>
+            </div>
+        </div>
+    </div>
+    
+    <header class="border-bottom">
+        <div class="container py-2">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center">
+                        <div class="logo-container me-3">
+                            <i class="bi bi-heart-pulse-fill me-2" style="font-size: 1.8rem;"></i>
+                            <div>
+                                <h4 class="mb-0" style="line-height: 1.2;">NAMASTE-ICD11<br><small style="font-size: 0.6rem; opacity: 0.9;">Terminology Service</small></h4>
+                            </div>
+                        </div>
+                        <div>
+                            <small class="text-muted">Ministry of Ayush, Government of India</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 text-end">
+                    <button class="btn btn-outline-primary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#authModal">
+                        <i class="bi bi-person-circle"></i> Login / Sign Up
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-question-circle"></i> Help
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <nav class="navbar navbar-expand-lg navbar-dark nav-gradient">
+            <div class="container">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item"><a class="nav-link active" href="#"><i class="bi bi-house-door"></i> Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#search-section"><i class="bi bi-search"></i> Code Search</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#mapping-section"><i class="bi bi-diagram-3"></i> Mappings</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#fhir-section"><i class="bi bi-file-medical"></i> FHIR Tools</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/docs" target="_blank"><i class="bi bi-cloud-arrow-up"></i> API Documentation</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container my-5">
+        <div class="integration-graphic">
+            <div class="integration-circle integration-namaste"><div class="text-center"><i class="bi bi-file-medical text-primary" style="font-size: 2rem;"></i><div class="mt-2 fw-bold">NAMASTE</div></div></div>
+            <div class="integration-arrow"><i class="bi bi-arrow-right"></i></div>
+            <div class="integration-circle integration-tm2"><div class="text-center"><i class="bi bi-shuffle text-success" style="font-size: 2rem;"></i><div class="mt-2 fw-bold">ICD-11 TM2</div></div></div>
+            <div class="integration-arrow"><i class="bi bi-arrow-right"></i></div>
+            <div class="integration-circle integration-icd11"><div class="text-center"><i class="bi bi-globe2" style="font-size: 2rem; color: var(--icd11-color);"></i><div class="mt-2 fw-bold">ICD-11</div></div></div>
+        </div>
+
+        <section class="search-container" id="search-section">
+            <h2 class="mb-4"><i class="bi bi-search me-2"></i>Terminology Search</h2>
+            <p class="text-muted mb-4">Search across NAMASTE, ICD-11 TM2, and Biomedicine code systems</p>
+            
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control form-control-lg" placeholder="Enter term or code (e.g., 'fever' or 'arditaH')" id="terminologySearch">
+                        <button class="btn btn-primary" type="button" id="searchButton">
+                            <i class="bi bi-search"></i> Search
+                        </button>
+                    </div>
+                    
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="namasteCheck" checked>
+                        <label class="form-check-label" for="namasteCheck">NAMASTE</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="tm2Check" checked>
+                        <label class="form-check-label" for="tm2Check">ICD-11 TM2</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="biomedicineCheck" checked>
+                        <label class="form-check-label" for="biomedicineCheck">ICD-11 Biomedicine</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-title">Quick Access</h6>
+                            <button class="btn btn-outline-primary btn-sm w-100 mb-2" id="browseBtn"><i class="bi bi-lightning"></i> Browse Mapped Codes</button>
+                            <button class="btn btn-outline-primary btn-sm w-100 mb-2" id="mappingBtn"><i class="bi bi-diagram-3"></i> View Example Mapping</button>
+                            <button class="btn btn-outline-primary btn-sm w-100" id="fhirBtn"><i class="bi bi-file-code"></i> FHIR Utilities</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5 d-none" id="resultsSection">
+            <h3 class="mb-4">Search Results</h3>
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i> Showing results for: <strong id="searchQueryText">""</strong>
+                <span class="spinner-border spinner-border-sm ms-2" role="status" id="resultsSpinner"></span>
+            </div>
+            <div id="searchResults"></div>
+        </section>
+
+        <section class="mb-5 d-none" id="mappingSection">
+            <h3 class="mb-4">Code Mapping Visualization</h3>
+            <div class="card mb-4">
+                <div class="card-header bg-light"><h5 class="mb-0">NAMASTE ↔ ICD-11 TM2</h5></div>
+                <div class="card-body">
+                    <div class="mapping-line">
+                        <div id="namaste-mapping-card" class="card concept-card">
+                            <div class="card-body"><div class="d-flex justify-content-between"><h5 class="card-title">--</h5><span class="badge system-badge-namaste terminology-pill">NAMASTE: --</span></div><p class="card-text">--</p></div>
+                        </div>
+                        <div class="mapping-arrow"><i class="bi bi-arrow-left-right" style="font-size: 1.5rem;"></i></div>
+                        <div id="tm2-mapping-card" class="card concept-card">
+                             <div class="card-body"><div class="d-flex justify-content-between"><h5 class="card-title">--</h5><span class="badge system-badge-icd-11-tm2 terminology-pill">ICD-11 TM2: --</span></div><p class="card-text">--</p></div>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="dropdown d-inline-block">
+                            <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"><i class="bi bi-gear"></i> Mapping Actions</button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" id="copyMappingBtn"><i class="bi bi-clipboard"></i> Copy Mapping</a></li>
+                                <li><a class="dropdown-item" href="#" id="saveMappingBtn"><i class="bi bi-save"></i> Save to Favorites</a></li>
+                                <li><a class="dropdown-item" href="#" id="shareMappingBtn"><i class="bi bi-share"></i> Share Mapping</a></li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-outline-secondary btn-sm ms-2" id="createFhirBtn"><i class="bi bi-file-medical"></i> Create FHIR Resource</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5" id="fhir-section">
+            </section>
+        
+    </main>
+
+    <footer class="py-4 mt-5 text-white">
+        </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            
+            // --- GLOBAL DATA STORE ---
+            let namasteCodeSystem = null;
+            let namasteConceptMap = null;
+
+            // --- INITIALIZATION ---
+            // Fetch core terminology data from the API on page load
+            Promise.all([
+                fetch('/ayurveda').then(res => res.json()),
+                fetch('/mapped').then(res => res.json())
+            ]).then(([codeSystem, conceptMap]) => {
+                namasteCodeSystem = codeSystem;
+                namasteConceptMap = conceptMap;
+                
+                // Once data is loaded, initialize components that depend on it
+                initCodeSelects();
+                updateFhirResource();
+                showToast('Terminology systems loaded successfully.', 'success');
+            }).catch(error => {
+                console.error("Failed to load initial data:", error);
+                showToast('Error: Could not load terminology data from API.', 'danger');
+            });
+
+            // --- SEARCH FUNCTIONALITY ---
+            async function performSearch(query) {
+                const searchTerm = query.toLowerCase().trim();
+                let results = [];
+                let addedCodes = new Set();
+                
+                const showNamaste = $('#namasteCheck').is(':checked');
+                const showTm2 = $('#tm2Check').is(':checked');
+                const showBiomedicine = $('#biomedicineCheck').is(':checked');
+
+                // 1. Search local NAMASTE & TM2 data (fetched on load)
+                if ((showNamaste || showTm2) && namasteCodeSystem) {
+                    namasteCodeSystem.concept.forEach(concept => {
+                        const match = (searchTerm === '') || // Show all if query is empty
+                                      (concept.code && concept.code.toLowerCase().includes(searchTerm)) ||
+                                      (concept.display && concept.display.toLowerCase().includes(searchTerm)) ||
+                                      (concept.definition && concept.definition.toLowerCase().includes(searchTerm));
+                        
+                        if (match && !addedCodes.has(concept.code)) {
+                            const namasteCodeSimpleMatch = concept.code.match(/\((.*?)\)/);
+                            if (namasteCodeSimpleMatch && namasteCodeSimpleMatch[1]) {
+                                const mapping = namasteConceptMap.group[0].element.find(e => e.code === namasteCodeSimpleMatch[1]);
+                                if (showNamaste) {
+                                    results.push({ system: 'NAMASTE', code: concept.code, display: concept.display, definition: concept.definition });
+                                }
+                                if (showTm2 && mapping?.target?.[0]) {
+                                    results.push({ system: 'ICD-11 TM2', code: mapping.target[0].code, display: mapping.target[0].display, definition: `Mapping for NAMASTE: ${concept.display}` });
+                                }
+                                addedCodes.add(concept.code);
+                            }
+                        }
+                    });
+                }
+
+                // 2. Search ICD-11 Biomedicine via API if checked and query is not empty
+                if (showBiomedicine && searchTerm) {
+                    try {
+                        const response = await fetch(`/icd/search?q=${encodeURIComponent(searchTerm)}`);
+                        if (!response.ok) throw new Error(`API returned status ${response.status}`);
+                        const icdResults = await response.json();
+                        
+                        icdResults.forEach(item => {
+                            results.push({ system: 'ICD-11', code: item.code, display: item.title, definition: item.definition || 'No definition available.' });
+                        });
+                    } catch (error) {
+                        console.error("ICD-11 search failed:", error);
+                        showToast('ICD-11 Biomedicine search failed.', 'danger');
+                    }
+                }
+
+                displaySearchResults(results);
+            }
+
+            // Handle search button click
+            $('#searchButton').click(async () => {
+                const query = $('#terminologySearch').val();
+                if (!namasteCodeSystem) {
+                    showToast('Terminology data is still loading. Please wait.', 'warning');
+                    return;
+                }
+                $('#searchQueryText').text('"' + (query || 'All Mapped Codes') + '"');
+                $('#resultsSection').removeClass('d-none');
+                $('#resultsSpinner').show();
+                
+                await performSearch(query);
+                
+                $('#resultsSpinner').hide();
+            });
+            
+            function displaySearchResults(results) {
+                let resultsHtml = '';
+                
+                if (results && results.length > 0) {
+                    for (const item of results) {
+                        const systemClass = item.system.replace(/\s+/g, '-').toLowerCase();
+                        const showMappingButton = item.system === 'NAMASTE' || item.system === 'ICD-11 TM2';
+                        
+                        resultsHtml += 
+                            `<div class="card concept-card">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h5 class="card-title mb-1">${item.display}</h5>
+                                            <p class="card-text small text-muted">${item.definition}</p>
+                                        </div>
+                                        <span class="badge system-badge-${systemClass} terminology-pill ms-3 text-nowrap">${item.system}: ${item.code}</span>
+                                    </div>
+                                    ${showMappingButton ? 
+                                        `<button class="btn btn-outline-primary btn-sm view-mapping-btn mt-2" data-code="${item.code}" data-system="${item.system}">
+                                            <i class="bi bi-diagram-3"></i> View Mapping
+                                        </button>` : ''
+                                    }
+                                </div>
+                            </div>`;
+                    }
+                } else {
+                    resultsHtml = `<div class="alert alert-warning"><i class="bi bi-exclamation-triangle"></i> No results found.</div>`;
+                }
+                
+                $('#searchResults').html(resultsHtml);
+                $('#mappingSection').addClass('d-none');
+            }
+            
+            // --- MAPPING FUNCTIONALITY ---
+            $(document).on('click', '.view-mapping-btn', function() {
+                const code = $(this).data('code');
+                const system = $(this).data('system');
+                let namasteConcept, mapping;
+
+                if (system === 'NAMASTE') {
+                    namasteConcept = namasteCodeSystem.concept.find(c => c.code === code);
+                    const namasteCodeSimple = code.match(/\((.*?)\)/);
+                    if (namasteCodeSimple && namasteCodeSimple[1]) {
+                        mapping = namasteConceptMap.group[0].element.find(e => e.code === namasteCodeSimple[1]);
+                    }
+                } else { // system is ICD-11 TM2
+                    mapping = namasteConceptMap.group[0].element.find(e => e.target[0] && e.target[0].code === code);
+                    if (mapping) {
+                        namasteConcept = namasteCodeSystem.concept.find(c => c.code.includes(`(${mapping.code})`));
+                    }
+                }
+
+                if (namasteConcept && mapping) {
+                    const namasteCard = $('#namaste-mapping-card');
+                    namasteCard.find('.card-title').text(namasteConcept.display);
+                    namasteCard.find('.badge').text(`NAMASTE: ${namasteConcept.code}`);
+                    namasteCard.find('.card-text').text(namasteConcept.definition);
+
+                    const tm2Card = $('#tm2-mapping-card');
+                    tm2Card.find('.card-title').text(mapping.target[0].display);
+                    tm2Card.find('.badge').text(`ICD-11 TM2: ${mapping.target[0].code}`);
+                    tm2Card.find('.card-text').text(`An equivalent term for '${namasteConcept.display}' in the Traditional Medicine Module 2.`);
+                    
+                    $('#mappingSection').removeClass('d-none');
+                    $('html, body').animate({ scrollTop: $('#mappingSection').offset().top - 80 }, 500);
+                } else {
+                    showToast('Could not find a complete mapping for this code.', 'warning');
+                }
+            });
+            
+            // --- UI & UTILITY FUNCTIONS ---
+            
+            function initCodeSelects() {
+                if (!namasteCodeSystem || !namasteConceptMap) return;
+                const namasteSelect = $('#namasteCodeSelect');
+                const icd11Select = $('#icd11CodeSelect');
+                
+                namasteSelect.empty().append('<option selected disabled>Select a NAMASTE code...</option>');
+                icd11Select.empty().append('<option selected disabled>Select an ICD-11 TM2 code...</option>');
+
+                namasteConceptMap.group[0].element.forEach(mapping => {
+                    const namasteConcept = namasteCodeSystem.concept.find(c => c.code.includes(`(${mapping.code})`));
+                    if(namasteConcept && mapping.target[0]) {
+                        namasteSelect.append(`<option value="${namasteConcept.code}">${namasteConcept.code}: ${namasteConcept.display}</option>`);
+                        icd11Select.append(`<option value="${mapping.target[0].code}">${mapping.target[0].code}: ${mapping.target[0].display}</option>`);
+                    }
+                });
+            }
+            
+            function updateFhirResource() { /* Logic for FHIR builder remains the same */ }
+
+            function showToast(message, type = 'info') {
+                const toastId = 'toast-' + Date.now();
+                const toastHtml = `
+                    <div id="${toastId}" class="toast align-items-center text-white bg-${type} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="d-flex">
+                            <div class="toast-body">${message}</div>
+                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                    </div>`;
+                $('#toastContainer').append(toastHtml);
+                const toastEl = document.getElementById(toastId);
+                const bsToast = new bootstrap.Toast(toastEl, { delay: 4000 });
+                bsToast.show();
+                toastEl.addEventListener('hidden.bs.toast', () => toastEl.remove());
+            }
+
+            // Quick access buttons
+            $('#browseBtn').click(() => {
+                $('#terminologySearch').val('');
+                $('#searchButton').click();
+            });
+            
+            $('#mappingBtn').click(() => {
+                if (!namasteCodeSystem) return;
+                const firstConceptCode = namasteCodeSystem.concept.find(c => c.code.includes('('))?.code;
+                if(firstConceptCode) {
+                    // Create a temporary button to click, as it might not be in the DOM yet
+                     $(`<button class="view-mapping-btn" data-code="${firstConceptCode}" data-system="NAMASTE"></button>`).click();
+                }
+            });
+
+            // General event listeners
+            $('#terminologySearch').keypress(e => { if (e.which === 13) $('#searchButton').click(); });
+        });
+    </script>
+</body>
+</html>

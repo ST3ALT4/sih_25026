@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NAMASTE-ICD11 Terminology Service | Ministry of Ayush</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    
+    <style>
+        :root {
+            --namaste-color: #3498db;
+            --tm2-color: #2ecc71;
+            --icd11-color: #9b59b6;
+            --primary-gradient: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+            --background-gradient: linear-gradient(120deg, #f8f9fa 0%, #e9ecef 100%);
+            --orange: #e67e22;
+        }
+        
+        body {
+            background: var(--background-gradient);
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 90% 80%, rgba(13, 110, 253, 0.03) 0%, transparent 20%),
+                radial-gradient(circle at 20% 10%, rgba(46, 204, 113, 0.03) 0%, transparent 20%),
+                radial-gradient(circle at 50% 50%, rgba(155, 89, 182, 0.02) 0%, transparent 30%);
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .system-badge-namaste {
+            background-color: var(--namaste-color);
+        }
+        
+        .system-badge-tm2 {
+            background-color: var(--tm2-color);
+        }
+        
+        .system-badge-icd11 {
+            background-color: var(--icd11-color);
+        }
+        
+        .search-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(222, 226, 230, 0.8);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            backdrop-filter: blur(5px);
+        }
+        
+        .concept-card {
+            transition: all 0.3s ease;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.04);
+            background: white;
+        }
+        
+        .concept-card:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transform: translateY(-3px);
+        }
+        
+        .mapping-line {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .mapping-arrow {
+            margin: 0 15px;
+            color: #6c757d;
+            font-size: 24px;
+        }
+        
+        .fhir-resource {
+            font-family: 'Courier New', monospace;
+            background-color: #f8f9fa;
+            border-left: 4px solid #0d6efd;
+            padding: 15px;
+            border-radius: 5px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 0.9rem;
+        }
+        
+        .terminology-pill {
+            font-size: 0.75rem;
+            padding: 0.35em 0.65em;
+        }
+        
+        #searchResults {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .loading-spinner {
+            display: none;
+            width: 2rem;
+            height: 2rem;
+            border: 0.25em solid currentColor;
+            border-right-color: transparent;
+        }
+        
+        .logo-container {
+            background: var(--primary-gradient);
+            color: white;
+            border-radius: 12px;
+            padding: 12px 18px;
+            display: inline-flex;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+        }
+        
+        header {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .nav-gradient {
+            background: var(--primary-gradient);
+            box-shadow: 0 4px 15px rgba(13, 110, 253, 0.25);
+        }
+        
+        .card {
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(222, 226, 230, 0.8);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn {
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+        
+        footer {
+            background: linear-gradient(135deg, #343a40 0%, #212529 100%);
+            margin-top: 50px;
+        }
+        
+        .floating-shape {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, rgba(13, 110, 253, 0.1) 0%, rgba(102, 16, 242, 0.1) 100%);
+            filter: blur(50px);
+            z-index: -1;
+            opacity: 0.5;
+        }
+        
+        .shape-1 {
+            top: 10%;
+            right: -100px;
+        }
+        
+        .shape-2 {
+            bottom: 20%;
+            left: -150px;
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(45deg, rgba(46, 204, 113, 0.1) 0%, rgba(52, 152, 219, 0.1) 100%);
+        }
+        
+        .integration-graphic {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+        }
+        
+        .integration-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            background: white;
+        }
+        
+        .integration-arrow {
+            font-size: 24px;
+            color: #6c757d;
+            margin: 0 10px;
+        }
+        
+        .integration-namaste {
+            border: 3px solid var(--namaste-color);
+        }
+        
+        .integration-tm2 {
+            border: 3px solid var(--tm2-color);
+        }
+        
+        .integration-icd11 {
+            border: 3px solid var(--icd11-color);
+        }
+        
+        .mapping-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        
+        .mapping-details.show {
+            max-height: 500px;
+        }
+        
+        .dropdown-menu {
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .dropdown-item {
+            padding: 0.5rem 1rem;
+            transition: all 0.2s;
+        }
+        
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+        
+        /* Signup Form Styles */
+        .signup-form {
+            background: #fff;
+            width: 350px;
+            padding: 30px;
+            border-radius: 6px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            font-family: 'Lato', sans-serif;
+            color: #333;
+            margin: 40px auto;
+        }
+
+        .signup-form h2 {
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .signup-form p {
+            font-size: 14px;
+            margin-bottom: 15px;
+            color: #666;
+        }
+
+        .social-signup {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .social-btn {
+            flex: 1;
+            color: #fff;
+            border: none;
+            padding: 10px 0;
+            margin: 0 5px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .social-btn.twitter {
+            background: #3bcaff;
+        }
+
+        .social-btn.facebook {
+            background: #3b5998;
+        }
+
+        .social-btn.googleplus {
+            background: #dd4b39;
+        }
+
+        .signup-form form input {
+            width: 100%;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .create-account-btn {
+            width: 100%;
+            background: var(--orange);
+            border: none;
+            padding: 12px;
+            border-radius: 3px;
+            font-weight: 700;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .create-account-btn:hover {
+            background: #cf711c;
+        }
+        
+        /* Auth Modal Styles */
+        .auth-modal .modal-content {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .auth-header {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .auth-tabs {
+            display: flex;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .auth-tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .auth-tab.active {
+            border-bottom: 3px solid #0d6efd;
+            font-weight: bold;
+        }
+        
+        .auth-form {
+            padding: 20px;
+        }
+        
+        .auth-form .form-check {
+            margin-bottom: 15px;
+        }
+        
+        .auth-form .btn {
+            background: var(--orange);
+            border: none;
+            padding: 12px;
+        }
+        
+        .auth-form .btn:hover {
+            background: #cf711c;
+        }
+        
+        @media (max-width: 768px) {
+            .mapping-line {
+                flex-direction: column;
+            }
+            
+            .mapping-arrow {
+                transform: rotate(90deg);
+                margin: 10px 0;
+            }
+            
+            .integration-graphic {
+                flex-direction: column;
+            }
+            
+            .integration-arrow {
+                transform: rotate(90deg);
+                margin: 10px 0;
+            }
+            
+            .signup-form {
+                width: 90%;
+                margin: 20px auto;
+            }
+            
+            .social-signup {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="floating-shape shape-1"></div>
+    <div class="floating-shape shape-2"></div>
+    
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+    
+    <!-- Auth Modal -->
+    <div class="modal fade auth-modal" id="authModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="auth-header">
+                    <h4 class="mb-0">NAMASTE-ICD11 Terminology Service</h4>
+                    <p class="mb-0">Access advanced terminology tools</p>
+                </div>
+                
+                <div class="auth-tabs">
+                    <div class="auth-tab active" id="loginTab">Login</div>
+                    <div class="auth-tab" id="signupTab">Sign Up</div>
+                </div>
+                
+                <div class="auth-form">
+                    <!-- Login Form -->
+                    <form id="loginForm" class="auth-form-content">
+                        <div class="mb-3">
+                            <label for="loginEmail" class="form-label">Email address</label>
+                            <input type="email" class="form-control" id="loginEmail" placeholder="Enter your email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="loginPassword" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="loginPassword" placeholder="Enter your password">
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="rememberMe">
+                            <label class="form-check-label" for="rememberMe">Remember me</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                        
+                        <div class="text-center mt-3">
+                            <a href="#" class="text-decoration-none">Forgot password?</a>
+                        </div>
+                    </form>
+                    
+                    <!-- Signup Form -->
+                    <form id="signupForm" class="auth-form-content d-none">
+                        <div class="mb-3">
+                            <label for="signupName" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="signupName" placeholder="Enter your full name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="signupEmail" class="form-label">Email address</label>
+                            <input type="email" class="form-control" id="signupEmail" placeholder="Enter your email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="signupPassword" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="signupPassword" placeholder="Create a password">
+                        </div>
+                        <div class="mb-3">
+                            <label for="signupConfirmPassword" class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" id="signupConfirmPassword" placeholder="Confirm your password">
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="termsAgree">
+                            <label class="form-check-label" for="termsAgree">I agree to the <a href="#" class="text-decoration-none">Terms of Service</a> and <a href="#" class="text-decoration-none">Privacy Policy</a></label>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Create Account</button>
+                        
+                        <div class="social-signup mt-3">
+                            <p class="text-center">Or sign up using:</p>
+                            <button type="button" class="social-btn twitter">Twitter</button>
+                            <button type="button" class="social-btn facebook">Facebook</button>
+                            <button type="button" class="social-btn googleplus">Google</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Header Section -->
+    <header class="border-bottom">
+        <div class="container py-2">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center">
+                        <div class="logo-container me-3">
+                            <i class="bi bi-heart-pulse-fill me-2" style="font-size: 1.8rem;"></i>
+                            <div>
+                                <h4 class="mb-0" style="line-height: 1.2;">NAMASTE-ICD11<br><small style="font-size: 0.6rem; opacity: 0.9;">Terminology Service</small></h4>
+                            </div>
+                        </div>
+                        <div>
+                            <small class="text-muted">Ministry of Ayush, Government of India</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 text-end">
+                    <button class="btn btn-outline-primary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#authModal">
+                        <i class="bi bi-person-circle"></i> Login / Sign Up
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-question-circle"></i> Help
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <nav class="navbar navbar-expand-lg navbar-dark nav-gradient">
+            <div class="container">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#"><i class="bi bi-house-door"></i> Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#search-section"><i class="bi bi-search"></i> Code Search</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#mapping-section"><i class="bi bi-diagram-3"></i> Mappings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#fhir-section"><i class="bi bi-file-medical"></i> FHIR Tools</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"><i class="bi bi-cloud-arrow-up"></i> API Documentation</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content Section -->
+    <main class="container my-5">
+        <!-- Integration Graphic -->
+        <div class="integration-graphic">
+            <div class="integration-circle integration-namaste">
+                <div class="text-center">
+                    <i class="bi bi-file-medical text-primary" style="font-size: 2rem;"></i>
+                    <div class="mt-2 fw-bold">NAMASTE</div>
+                </div>
+            </div>
+            <div class="integration-arrow">
+                <i class="bi bi-arrow-right"></i>
+            </div>
+            <div class="integration-circle integration-tm2">
+                <div class="text-center">
+                    <i class="bi bi-shuffle text-success" style="font-size: 2rem;"></i>
+                    <div class="mt-2 fw-bold">ICD-11 TM2</div>
+                </div>
+            </div>
+            <div class="integration-arrow">
+                <i class="bi bi-arrow-right"></i>
+            </div>
+            <div class="integration-circle integration-icd11">
+                <div class="text-center">
+                    <i class="bi bi-globe2 text-purple" style="font-size: 2rem; color: #9b59b6;"></i>
+                    <div class="mt-2 fw-bold">ICD-11</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Section -->
+        <section class="search-container" id="search-section">
+            <h2 class="mb-4"><i class="bi bi-search me-2"></i>Terminology Search</h2>
+            <p class="text-muted mb-4">Search across NAMASTE, ICD-11 TM2, and Biomedicine code systems</p>
+            
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control form-control-lg" placeholder="Enter term or code (e.g., 'Jwara' or 'KA20')" id="terminologySearch">
+                        <button class="btn btn-primary" type="button" id="searchButton">
+                            <i class="bi bi-search"></i> Search
+                        </button>
+                    </div>
+                    
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="namasteCheck" checked>
+                        <label class="form-check-label" for="namasteCheck">NAMASTE</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="tm2Check" checked>
+                        <label class="form-check-label" for="tm2Check">ICD-11 TM2</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="biomedicineCheck" checked>
+                        <label class="form-check-label" for="biomedicineCheck">ICD-11 Biomedicine</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-title">Quick Access</h6>
+                            <button class="btn btn-outline-primary btn-sm w-100 mb-2" id="browseBtn">
+                                <i class="bi bi-lightning"></i> Browse NAMASTE Codes
+                            </button>
+                            <button class="btn btn-outline-primary btn-sm w-100 mb-2" id="mappingBtn">
+                                <i class="bi bi-diagram-3"></i> View Mappings
+                            </button>
+                            <button class="btn btn-outline-primary btn-sm w-100" id="fhirBtn">
+                                <i class="bi bi-file-code"></i> FHIR Utilities
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Search Results Section -->
+        <section class="mb-5 d-none" id="resultsSection">
+            <h3 class="mb-4">Search Results</h3>
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i> Showing results for: <strong id="searchQueryText">"Jwara"</strong>
+                <span class="spinner-border spinner-border-sm ms-2" role="status" id="resultsSpinner"></span>
+            </div>
+            
+            <div id="searchResults">
+                <!-- Results will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Mapping Visualization Section -->
+        <section class="mb-5 d-none" id="mappingSection">
+            <h3 class="mb-4">Code Mapping Visualization</h3>
+            
+            <div class="card mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">NAMASTE ↔ ICD-11 TM2 ↔ ICD-11 Biomedicine</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mapping-line">
+                        <div class="card concept-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <h5 class="card-title">Jwara (Fever)</h5>
+                                    <span class="badge system-badge-namaste terminology-pill">NAMASTE: AY-100</span>
+                                </div>
+                                <p class="card-text">A condition characterized by raised body temperature, often accompanied by other symptoms.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mapping-arrow">
+                            <i class="bi bi-arrow-left-right" style="font-size: 1.5rem;"></i>
+                        </div>
+                        
+                        <div class="card concept-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <h5 class="card-title">Disorders characterized by fever</h5>
+                                    <span class="badge system-badge-tm2 terminology-pill">ICD-11 TM2: KA20</span>
+                                </div>
+                                <p class="card-text">Disorders where fever is a primary symptom, often related to imbalances of doshas.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mapping-arrow">
+                            <i class="bi bi-arrow-left-right" style="font-size: 1.5rem;"></i>
+                        </div>
+                        
+                        <div class="card concept-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <h5 class="card-title">Fever, unspecified</h5>
+                                    <span class="badge system-badge-icd11 terminology-pill">ICD-11: MG26</span>
+                                </div>
+                                <p class="card-text">Elevated body temperature due to unknown cause, not elsewhere classified.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <div class="dropdown d-inline-block">
+                            <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" id="mappingActionsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-gear"></i> Mapping Actions
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="mappingActionsDropdown">
+                                <li><a class="dropdown-item" href="#" id="copyMappingBtn"><i class="bi bi-clipboard"></i> Copy Mapping</a></li>
+                                <li><a class="dropdown-item" href="#" id="saveMappingBtn"><i class="bi bi-save"></i> Save to Favorites</a></li>
+                                <li><a class="dropdown-item" href="#" id="shareMappingBtn"><i class="bi bi-share"></i> Share Mapping</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#" id="viewDetailsBtn"><i class="bi bi-info-circle"></i> View Details</a></li>
+                            </ul>
+                        </div>
+                        
+                        <button class="btn btn-outline-secondary btn-sm ms-2" id="createFhirBtn">
+                            <i class="bi bi-file-medical"></i> Create FHIR Resource
+                        </button>
+                    </div>
+                    
+                    <!-- Mapping Details Section (Initially Hidden) -->
+                    <div class="mapping-details mt-4" id="mappingDetails">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="mb-0">Mapping Details</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <h6>NAMASTE Code</h6>
+                                        <p><strong>AY-100:</strong> Jwara (Fever)</p>
+                                        <p class="small">A condition characterized by raised body temperature, often accompanied by other symptoms.</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h6>ICD-11 TM2 Code</h6>
+                                        <p><strong>KA20:</strong> Disorders characterized by fever</p>
+                                        <p class="small">Disorders where fever is a primary symptom, often related to imbalances of doshas.</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h6>ICD-11 Code</h6>
+                                        <p><strong>MG26:</strong> Fever, unspecified</p>
+                                        <p class="small">Elevated body temperature due to unknown cause, not elsewhere classified.</p>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-12">
+                                        <h6>Mapping Information</h6>
+                                        <table class="table table-sm">
+                                            <tr>
+                                                <th>Mapping Type</th>
+                                                <td>Equivalent</td>
+                                                <th>Status</th>
+                                                <td>Approved</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Last Updated</th>
+                                                <td>2023-08-15</td>
+                                                <th>Source</th>
+                                                <td>Ministry of Ayush</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Confidence Score</th>
+                                                <td>95%</td>
+                                                <th>Review Status</th>
+                                                <td>Peer Reviewed</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FHIR Resource Builder Section -->
+        <section class="mb-5" id="fhir-section">
+            <h3 class="mb-4">FHIR Resource Builder</h3>
+            
+            <div class="card">
+                <div class="card-header bg-light">
+                    <ul class="nav nav-tabs card-header-tabs" id="fhirTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="problem-list-tab" data-bs-toggle="tab" data-bs-target="#problem-list" type="button" role="tab">ProblemList</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="codesystem-tab" data-bs-toggle="tab" data-bs-target="#codesystem" type="button" role="tab">CodeSystem</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="conceptmap-tab" data-bs-toggle="tab" data-bs-target="#conceptmap" type="button" role="tab">ConceptMap</button>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content" id="fhirTabContent">
+                        <div class="tab-pane fade show active" id="problem-list" role="tabpanel">
+                            <p class="text-muted">Create a FHIR ProblemList resource with dual coding (NAMASTE + ICD-11)</p>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">NAMASTE Code</label>
+                                    <select class="form-select" id="namasteCodeSelect">
+                                        <option selected>Select a NAMASTE code...</option>
+                                        <option value="AY-100">AY-100: Jwara (Fever)</option>
+                                        <option value="AY-101">AY-101: Atisara (Diarrhea)</option>
+                                        <option value="AY-102">AY-102: Kasa (Cough)</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">ICD-11 Code</label>
+                                    <select class="form-select" id="icd11CodeSelect">
+                                        <option selected>Select an ICD-11 code...</option>
+                                        <option value="MG26">MG26: Fever, unspecified</option>
+                                        <option value="ME04.5">ME04.5: Acute diarrhoea</option>
+                                        <option value="CA02">CA02: Cough</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Clinical Status</label>
+                                <select class="form-select" id="clinicalStatus">
+                                    <option value="active">Active</option>
+                                    <option value="recurrence">Recurrence</option>
+                                    <option value="inactive">Inactive</option>
+                                    <option value="remission">Remission</option>
+                                    <option value="resolved">Resolved</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Verification Status</label>
+                                <select class="form-select" id="verificationStatus">
+                                    <option value="unconfirmed">Unconfirmed</option>
+                                    <option value="differential">Differential</option>
+                                    <option value="confirmed">Confirmed</option>
+                                    <option value="refuted">Refuted</option>
+                                    <option value="entered-in-error">Entered in Error</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Severity</label>
+                                <select class="form-select" id="severity">
+                                    <option value="mild">Mild</option>
+                                    <option value="moderate">Moderate</option>
+                                    <option value="severe">Severe</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">FHIR ProblemList Resource</label>
+                                <div class="fhir-resource" id="fhirResourceOutput">
+{
+  "resourceType": "List",
+  "id": "problem-list-example",
+  "meta": {
+    "profile": ["http://hl7.org/fhir/StructureDefinition/List"]
+  },
+  "status": "current",
+  "mode": "snapshot",
+  "title": "Problem List",
+  "code": {
+    "coding": [{
+      "system": "http://loinc.org",
+      "code": "11450-4",
+      "display": "Problem list"
+    }]
+  },
+  "subject": {
+    "reference": "Patient/example"
+  },
+  "date": "2023-09-10",
+  "entry": [{
+    "item": {
+      "extension": [{
+        "url": "http://hl7.org/fhir/StructureDefinition/list-item-status",
+        "valueCode": "active"
+      }],
+      "concept": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/namaste",
+            "code": "AY-100",
+            "display": "Jwara (Fever)"
+          },
+          {
+            "system": "http://hl7.org/fhir/sid/icd-11",
+            "code": "MG26",
+            "display": "Fever, unspecified"
+          }
+        ],
+        "text": "Fever"
+      },
+      "clinicalStatus": {
+        "coding": [{
+          "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+          "code": "active",
+          "display": "Active"
+        }]
+      },
+      "verificationStatus": {
+        "coding": [{
+          "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
+          "code": "confirmed",
+          "display": "Confirmed"
+        }]
+      },
+      "severity": {
+        "coding": [{
+          "system": "http://snomed.info/sct",
+          "code": "6736007",
+          "display": "Moderate"
+        }]
+      },
+      "recordedDate": "2023-09-10"
+    }
+  }]
+}
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-primary" id="downloadFhirBtn">
+                                    <i class="bi bi-download"></i> Download JSON
+                                </button>
+                                <button class="btn btn-outline-primary" id="copyFhirBtn">
+                                    <i class="bi bi-clipboard"></i> Copy to Clipboard
+                                </button>
+                                <button class="btn btn-outline-secondary" id="validateFhirBtn">
+                                    <i class="bi bi-check-circle"></i> Validate
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-pane fade" id="codesystem" role="tabpanel">
+                            <p class="text-muted">Explore and export CodeSystem resources</p>
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle"></i> CodeSystem functionality coming soon.
+                            </div>
+                        </div>
+                        
+                        <div class="tab-pane fade" id="conceptmap" role="tabpanel">
+                            <p class="text-muted">Explore and export ConceptMap resources</p>
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle"></i> ConceptMap functionality coming soon.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- API Status Section -->
+        <section class="mb-5">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">API Status</h5>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="badge bg-success me-2"><i class="bi bi-check-circle"></i> Operational</span>
+                            <span>NAMASTE Terminology Service</span>
+                        </div>
+                        <div>
+                            <span class="badge bg-success me-2"><i class="bi bi-check-circle"></i> Operational</span>
+                            <span>ICD-11 API Connection</span>
+                        </div>
+                        <div>
+                            <span class="badge bg-success me-2"><i class="bi bi-check-circle"></i> Operational</span>
+                            <span>FHIR Repository</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>NAMASTE-ICD11 Terminology Service</h5>
+                    <p>Integrating traditional Indian medicine with global health standards through standardized terminologies and FHIR-based interoperability.</p>
+                </div>
+                <div class="col-md-2">
+                    <h5>Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light">Ministry of Ayush</a></li>
+                        <li><a href="#" class="text-light">ICD-11 WHO</a></li>
+                        <li><a href="#" class="text-light">FHIR Standards</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Resources</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light">API Documentation</a></li>
+                        <li><a href="#" class="text-light">Implementation Guide</a></li>
+                        <li><a href="#" class="text-light">Terminology Browser</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Contact</h5>
+                    <address class="text-light">
+                        <strong>Ministry of Ayush</strong><br>
+                        Government of India<br>
+                        <abbr title="Email">E:</abbr> info@ayush.gov.in
+                    </address>
+                </div>
+            </div>
+            <hr class="bg-light">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0">© 2023 Ministry of Ayush, Government of India. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <span class="me-3">v1.0.0</span>
+                    <span>FHIR R4 Compliant</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap & jQuery JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script>
+        $(document).ready(function() {
+            // Mock data for demonstration
+            const mockData = {
+                "jwara": [
+                    {
+                        system: 'NAMASTE',
+                        code: 'AY-100',
+                        display: 'Jwara (Fever)',
+                        definition: 'A condition characterized by raised body temperature, often accompanied by other symptoms.'
+                    },
+                    {
+                        system: 'ICD-11 TM2',
+                        code: 'KA20',
+                        display: 'Disorders characterized by fever',
+                        definition: 'Disorders where fever is a primary symptom, often related to imbalances of doshas.'
+                    },
+                    {
+                        system: 'ICD-11',
+                        code: 'MG26',
+                        display: 'Fever, unspecified',
+                        definition: 'Elevated body temperature due to unknown cause, not elsewhere classified.'
+                    }
+                ],
+                "atisara": [
+                    {
+                        system: 'NAMASTE',
+                        code: 'AY-101',
+                        display: 'Atisara (Diarrhea)',
+                        definition: 'A condition characterized by frequent loose or liquid bowel movements.'
+                    },
+                    {
+                        system: 'ICD-11 TM2',
+                        code: 'DA90.0',
+                        display: 'Diarrhoea disorders',
+                        definition: 'Disorders where diarrhea is a primary symptom.'
+                    },
+                    {
+                        system: 'ICD-11',
+                        code: 'ME04.5',
+                        display: 'Acute diarrhoea',
+                        definition: 'Acute form of diarrhea, often caused by infections.'
+                    }
+                ],
+                "kasa": [
+                    {
+                        system: 'NAMASTE',
+                        code: 'AY-102',
+                        display: 'Kasa (Cough)',
+                        definition: 'A sudden expulsion of air from the lungs through the epiglottis.'
+                    },
+                    {
+                        system: 'ICD-11 TM2',
+                        code: 'CA00',
+                        display: 'Disorders with cough as a feature',
+                        definition: 'Disorders where cough is a primary symptom.'
+                    },
+                    {
+                        system: 'ICD-11',
+                        code: 'CA02',
+                        display: 'Cough',
+                        definition: 'Sudden, often repetitive, expulsion of air from the lungs.'
+                    }
+                ]
+            };
+
+            // Auth modal functionality
+            $('#loginTab').click(function() {
+                $('#loginTab').addClass('active');
+                $('#signupTab').removeClass('active');
+                $('#loginForm').removeClass('d-none');
+                $('#signupForm').addClass('d-none');
+            });
+            
+            $('#signupTab').click(function() {
+                $('#signupTab').addClass('active');
+                $('#loginTab').removeClass('active');
+                $('#signupForm').removeClass('d-none');
+                $('#loginForm').addClass('d-none');
+            });
+            
+            // Handle login form submission
+            $('#loginForm').submit(function(e) {
+                e.preventDefault();
+                const email = $('#loginEmail').val();
+                const password = $('#loginPassword').val();
+                
+                // In a real app, this would call your authentication API
+                // For demo purposes, we'll just show a success message
+                showToast('Login successful!', 'success');
+                $('#authModal').modal('hide');
+            });
+            
+            // Handle signup form submission
+            $('#signupForm').submit(function(e) {
+                e.preventDefault();
+                const name = $('#signupName').val();
+                const email = $('#signupEmail').val();
+                const password = $('#signupPassword').val();
+                const confirmPassword = $('#signupConfirmPassword').val();
+                
+                if (password !== confirmPassword) {
+                    showToast('Passwords do not match!', 'danger');
+                    return;
+                }
+                
+                if (!$('#termsAgree').is(':checked')) {
+                    showToast('Please agree to the terms and conditions', 'warning');
+                    return;
+                }
+                
+                // In a real app, this would call your registration API
+                // For demo purposes, we'll just show a success message
+                showToast('Account created successfully!', 'success');
+                $('#authModal').modal('hide');
+            });
+            
+            // Handle social login buttons
+            $('.social-btn').click(function() {
+                const platform = $(this).hasClass('twitter') ? 'Twitter' : 
+                               $(this).hasClass('facebook') ? 'Facebook' : 'Google';
+                showToast(`${platform} authentication would be triggered here`, 'info');
+            });
+       
+            async function performRealSearch(query) {
+                // 1. Get which systems are checked
+                const systems = [];
+                if ($('#namasteCheck').is(':checked')) systems.push('NAMASTE');
+                if ($('#tm2Check').is(':checked')) systems.push('ICD-11 TM2');
+                if ($('#biomedicineCheck').is(':checked')) systems.push('ICD-11');
+                
+                try {
+                    // 2. Call your real API endpoint
+                    const response = await fetch('/api/terminology/search', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            // Include auth token if needed (from Login team)
+                            // 'Authorization': 'Bearer ' + authToken
+                        },
+                        body: JSON.stringify({ query, systems })
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`Server returned ${response.status}: ${response.statusText}`);
+                    }
+                    
+                    const searchResults = await response.json();
+                    // 3. Display the real results
+                    displaySearchResults(searchResults);
+                    
+                } catch (error) {
+                    console.error('Search failed:', error);
+                    // Show error message to user
+                    $('#searchResults').html(
+                        `<div class="alert alert-danger">
+                            <i class="bi bi-exclamation-octagon"></i> Failed to perform search. Please try again.
+                        </div>`
+                    );
+                    throw error; // Re-throw to handle in the calling function
+                }
+            }
+
+            // Handle search functionality
+            $('#searchButton').click(function() {
+                const query = $('#terminologySearch').val().toLowerCase();
+                if (query) {
+                    $('#searchQueryText').text('"' + query + '"');
+                    $('#resultsSection').removeClass('d-none');
+                    $('#resultsSpinner').show();
+                    
+                    // Simulate API call with a delay
+                   performRealSearch(query).then(() => {
+                        $('#resultsSpinner').hide();
+                    }).catch(error => {
+                        $('#resultsSpinner').hide();
+                        showToast('Search error: ' + error.message, 'danger');
+                    });
+                }
+            });
+            
+            // Display search results
+            
+            function displaySearchResults(results) {
+                let resultsHtml = '';
+                
+                if (results && results.length > 0) {
+                    for (const item of results) {
+                        const systemClass = item.system.replace(/\s+/g, '-').toLowerCase();
+                        resultsHtml += 
+                            `<div class="card concept-card">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <h5 class="card-title">${item.display}</h5>
+                                        <span class="badge system-badge-${systemClass} terminology-pill">${item.system}: ${item.code}</span>
+                                    </div>
+                                    <p class="card-text">${item.definition}</p>
+                                    <button class="btn btn-outline-primary btn-sm view-mapping-btn" data-code="${item.code}" data-system="${item.system}">
+                                        <i class="bi bi-diagram-3"></i> View Mappings
+                                    </button>
+                                </div>
+                            </div>`;
+                    }
+                } else {
+                    resultsHtml = 
+                        `<div class="alert alert-warning">
+                            <i class="bi bi-exclamation-triangle"></i> No results found.
+                        </div>`;
+                }
+                
+                $('#searchResults').html(resultsHtml);
+                $('#mappingSection').addClass('d-none');
+            }
+            
+            // Handle view mapping buttons
+            $(document).on('click', '.view-mapping-btn', function() {
+                const code = $(this).data('code');
+                const system = $(this).data('system');
+                
+                // Show mapping section
+                $('#mappingSection').removeClass('d-none');
+                
+                // Scroll to mapping section
+                $('html, body').animate({
+                    scrollTop: $('#mappingSection').offset().top - 20
+                }, 500);
+                
+                // In a real application, we would fetch the actual mappings from an API
+                // For this demo, we'll just show the example mapping
+            });
+            
+            // Handle mapping actions
+            $('#viewDetailsBtn').click(function(e) {
+                e.preventDefault();
+                $('#mappingDetails').toggleClass('show');
+            });
+            
+            $('#copyMappingBtn').click(function(e) {
+                e.preventDefault();
+                // In a real app, this would copy mapping data to clipboard
+                showToast('Mapping copied to clipboard!', 'success');
+            });
+            
+            $('#saveMappingBtn').click(function(e) {
+                e.preventDefault();
+                showToast('Mapping saved to favorites!', 'success');
+            });
+            
+            $('#shareMappingBtn').click(function(e) {
+                e.preventDefault();
+                showToast('Sharing link copied to clipboard!', 'success');
+            });
+            
+            $('#createFhirBtn').click(function() {
+                // Scroll to FHIR section
+                $('html, body').animate({
+                    scrollTop: $('#fhir-section').offset().top - 20
+                }, 500);
+            });
+            
+            // Handle FHIR resource generation and export
+            function updateFhirResource() {
+                const namasteCode = $('#namasteCodeSelect').val();
+                const icd11Code = $('#icd11CodeSelect').val();
+                const clinicalStatus = $('#clinicalStatus').val();
+                const verificationStatus = $('#verificationStatus').val();
+                const severity = $('#severity').val();
+                
+                // Get display names for codes
+                const namasteDisplay = $('#namasteCodeSelect option:selected').text().split(': ')[1] || '';
+                const icd11Display = $('#icd11CodeSelect option:selected').text().split(': ')[1] || '';
+                
+                // Generate current date in YYYY-MM-DD format
+                const currentDate = new Date().toISOString().split('T')[0];
+                
+                // Create FHIR resource JSON
+                const fhirResource = {
+                    "resourceType": "List",
+                    "id": "problem-list-example",
+                    "meta": {
+                        "profile": ["http://hl7.org/fhir/StructureDefinition/List"]
+                    },
+                    "status": "current",
+                    "mode": "snapshot",
+                    "title": "Problem List",
+                    "code": {
+                        "coding": [{
+                            "system": "http://loinc.org",
+                            "code": "11450-4",
+                            "display": "Problem list"
+                        }]
+                    },
+                    "subject": {
+                        "reference": "Patient/example"
+                    },
+                    "date": currentDate,
+                    "entry": [{
+                        "item": {
+                            "extension": [{
+                                "url": "http://hl7.org/fhir/StructureDefinition/list-item-status",
+                                "valueCode": clinicalStatus
+                            }],
+                            "concept": {
+                                "coding": [
+                                    {
+                                        "system": "http://terminology.hl7.org/CodeSystem/namaste",
+                                        "code": namasteCode,
+                                        "display": namasteDisplay
+                                    },
+                                    {
+                                        "system": "http://hl7.org/fhir/sid/icd-11",
+                                        "code": icd11Code,
+                                        "display": icd11Display
+                                    }
+                                ],
+                                "text": namasteDisplay.split(' (')[0] || icd11Display
+                            },
+                            "clinicalStatus": {
+                                "coding": [{
+                                    "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+                                    "code": clinicalStatus,
+                                    "display": clinicalStatus.charAt(0).toUpperCase() + clinicalStatus.slice(1)
+                                }]
+                            },
+                            "verificationStatus": {
+                                "coding": [{
+                                    "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
+                                    "code": verificationStatus,
+                                    "display": verificationStatus.charAt(0).toUpperCase() + verificationStatus.slice(1)
+                                }]
+                            },
+                            "severity": {
+                                "coding": [{
+                                    "system": "http://snomed.info/sct",
+                                    "code": severity === 'mild' ? "255604002" : 
+                                            severity === 'moderate' ? "6736007" : "24484000",
+                                    "display": severity.charAt(0).toUpperCase() + severity.slice(1)
+                                }]
+                            },
+                            "recordedDate": currentDate
+                        }
+                    }]
+                };
+                
+                // Pretty print JSON
+                $('#fhirResourceOutput').text(JSON.stringify(fhirResource, null, 2));
+            }
+            
+            // Update FHIR resource when inputs change
+            $('#namasteCodeSelect, #icd11CodeSelect, #clinicalStatus, #verificationStatus, #severity').change(updateFhirResource);
+            
+            // Initialize with default values
+            updateFhirResource();
+            
+            // Handle FHIR resource download
+            $('#downloadFhirBtn').click(function() {
+                const fhirJson = $('#fhirResourceOutput').text();
+                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(fhirJson);
+                const downloadAnchorNode = document.createElement('a');
+                downloadAnchorNode.setAttribute("href", dataStr);
+                downloadAnchorNode.setAttribute("download", "problem-list.json");
+                document.body.appendChild(downloadAnchorNode);
+                downloadAnchorNode.click();
+                downloadAnchorNode.remove();
+                showToast('FHIR resource downloaded!', 'success');
+            });
+            
+            // Handle FHIR resource copy to clipboard
+            $('#copyFhirBtn').click(function() {
+                const fhirJson = $('#fhirResourceOutput').text();
+                navigator.clipboard.writeText(fhirJson).then(() => {
+                    showToast('FHIR resource copied to clipboard!', 'success');
+                }).catch(err => {
+                    showToast('Failed to copy to clipboard', 'danger');
+                });
+            });
+            
+            // Handle FHIR resource validation
+            $('#validateFhirBtn').click(function() {
+                // In a real app, this would validate against FHIR schema
+                showToast('FHIR resource validated successfully!', 'success');
+            });
+            
+            // Handle quick access buttons
+            $('#browseBtn').click(function() {
+                $('#terminologySearch').val('');
+                $('#searchButton').click();
+            });
+            
+            $('#mappingBtn').click(function() {
+                // Show mapping section
+                $('#mappingSection').removeClass('d-none');
+                
+                // Scroll to mapping section
+                $('html, body').animate({
+                    scrollTop: $('#mappingSection').offset().top - 20
+                }, 500);
+            });
+            
+            $('#fhirBtn').click(function() {
+                // Scroll to FHIR section
+                $('html, body').animate({
+                    scrollTop: $('#fhir-section').offset().top - 20
+                }, 500);
+            });
+            
+            // Allow pressing Enter to search
+            $('#terminologySearch').keypress(function(e) {
+                if (e.which === 13) {
+                    $('#searchButton').click();
+                }
+            });
+            
+            // Show toast notification
+            function showToast(message, type = 'info') {
+                // Create toast element
+                const toast = $(
+                    `<div class="toast align-items-center text-white bg-${type}" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="d-flex">
+                            <div class="toast-body">
+                                ${message}
+                            </div>
+                            <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                    </div>`
+                );
+                
+                // Add to container
+                $('#toastContainer').append(toast);
+                
+                // Initialize and show
+                const bsToast = new bootstrap.Toast(toast);
+                bsToast.show();
+                
+                // Remove after hidden
+                toast.on('hidden.bs.toast', function() {
+                    toast.remove();
+                });
+            }
+            
+            // Initialize code selects with real data
+            function initCodeSelects() {
+                // NAMASTE codes
+                const namasteOptions = [
+                    {value: 'AY-100', text: 'AY-100: Jwara (Fever)'},
+                    {value: 'AY-101', text: 'AY-101: Atisara (Diarrhea)'},
+                    {value: 'AY-102', text: 'AY-102: Kasa (Cough)'}
+                ];
+                
+                // ICD-11 codes
+                const icd11Options = [
+                    {value: 'MG26', text: 'MG26: Fever, unspecified'},
+                    {value: 'ME04.5', text: 'ME04.5: Acute diarrhoea'},
+                    {value: 'CA02', text: 'CA02: Cough'}
+                ];
+                
+                // Populate selects
+                const namasteSelect = $('#namasteCodeSelect');
+                namasteSelect.empty();
+                namasteSelect.append('<option selected>Select a NAMASTE code...</option>');
+                namasteOptions.forEach(option => {
+                    namasteSelect.append(`<option value="${option.value}">${option.text}</option>`);
+                });
+                
+                const icd11Select = $('#icd11CodeSelect');
+                icd11Select.empty();
+                icd11Select.append('<option selected>Select an ICD-11 code...</option>');
+                icd11Options.forEach(option => {
+                    icd11Select.append(`<option value="${option.value}">${option.text}</option>`);
+                });
+            }
+            
+            // Initialize the page
+            initCodeSelects();
+
+            window.terminologyService = {
+                search: performRealSearch,
+                
+                async getMappings(code, system) {
+                    try {
+                        const response = await fetch(`/api/mappings?code=${code}&system=${system}`);
+                        if (!response.ok) throw new Error('Failed to fetch mappings');
+                        return await response.json();
+                    } catch (error) {
+                        console.error('Failed to get mappings:', error);
+                        throw error;
+                    }
+                }
+            };
+        });
+    </script>
+</body>
+</html>
